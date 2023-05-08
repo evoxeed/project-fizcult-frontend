@@ -1,22 +1,53 @@
-<script setup>
-import HelloWorld from '@/components/HelloWorld.vue'
-</script>
-
 <template>
-  <HelloWorld msg="Кандидатская Сан Саныча" />
+  <v-app>
+    <v-app-bar
+        v-if="this.$route.name !== 'login' && this.$route.name !== 'registration'"
+        class="px-3"
+        color="white"
+        flat
+        density="compact"
+    >
+      <v-avatar
+          color="grey-darken-1"
+          size="32"
+      ></v-avatar>
+
+      <v-spacer></v-spacer>
+
+      <v-tabs
+          centered
+          color="grey-darken-2"
+      >
+        <v-tab
+            v-for="link in links"
+            :key="link"
+        >
+          {{ link }}
+        </v-tab>
+      </v-tabs>
+      <v-spacer></v-spacer>
+
+      <v-avatar
+          class="hidden-sm-and-down"
+          color="grey-darken-1"
+          size="32"
+      ></v-avatar>
+    </v-app-bar>
+
+    <v-main class="bg-grey-lighten-3">
+      <v-container>
+        <router-view />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script setup>
+import {ref} from "vue";
+
+const links = ref([
+  'Dashboard',
+  'Messages',
+  'Profile',
+  'Updates',])
+</script>

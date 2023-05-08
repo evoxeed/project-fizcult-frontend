@@ -1,16 +1,21 @@
 import {defineStore} from 'pinia'
+import {api} from "@/api/api.js";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        count: 0,
-        name: 'Eduardo'
+        userToken: 'sadasdadasd'
     }),
     getters: {
-        doubleCount: (state) => state.count * 2,
+        getUserToken: (state) => state.userToken
     },
     actions: {
-        increment() {
-            this.count++
+        registration(body) {
+            api
+                .registration(body)
+                .then((response) => {
+                    console.log(response)
+                    return response.data
+                })
         },
     }
 })
