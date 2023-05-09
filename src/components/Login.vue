@@ -18,15 +18,15 @@
 
             </v-form>
             <div class="mt-2">
-                <p v-if="isLogin" class="text-body-2">Нет аккаунта? <a href="#" @click="setEntry">Зарегистрируйтесь</a></p>
-                <p v-else class="text-body-2">Есть аккаунт? <a href="#" @click="setEntry">Войти</a></p>
+                <p v-if="isLogin" class="text-body-2">Нет аккаунта? <a href="#" @click="router.push({name: 'registration', query: {redirect: route.query.redirect}})">Зарегистрируйтесь</a></p>
+                <p v-else class="text-body-2">Есть аккаунт? <a href="#" @click="router.push({name: 'login', query: {redirect: route.query.redirect}})">Войти</a></p>
             </div>
         </v-sheet>
     </div>
 </template>
 
 <script setup>
-import {ref, computed} from "vue";
+import {ref, computed, watch} from "vue";
 import {useUserStore} from "@/stores/user.js";
 import {useRouter, useRoute} from "vue-router";
 
@@ -34,7 +34,6 @@ const userStore = useUserStore()
 const router = useRouter();
 const route = useRoute();
 const form = ref()
-
 const username = ref('')
 let isRemember = ref(true)
 const userlastname = ref('')
@@ -48,13 +47,17 @@ const isDisabledBtn = computed(() => {
   }
   return username.value?.length > 0 && userlastname.value?.length > 0 && password.value?.length > 0 && password.value === password2.value
 })
-
 const setRemember = () => isRemember.value = !isRemember.value
-const setEntry = () => {
-  isLogin.value = !isLogin.value
-  router.push(isLogin.value ? 'login' : 'registration')
+const setEntry = (newRoute) => {
+  isLogin.value = newRoute === 'login'
   form.value?.reset()
 }
+watch(
+    () => route.name,
+     newRoute => {
+       setEntry(newRoute)
+    }
+)
 const entry = () => {
     if (!isLogin.value) {
       const body = {

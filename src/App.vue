@@ -7,13 +7,7 @@
         flat
         density="compact"
     >
-      <v-avatar
-          color="grey-darken-1"
-          size="32"
-      ></v-avatar>
-
       <v-spacer></v-spacer>
-
       <v-tabs
           centered
           color="grey-darken-2"
@@ -26,18 +20,11 @@
         </v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
-
-      <v-avatar
-          class="hidden-sm-and-down"
-          color="grey-darken-1"
-          size="32"
-      ></v-avatar>
+      <router-link to="/login" class="text-decoration-none text-shades-black position-absolute" style="right: 0">Войти</router-link>
     </v-app-bar>
 
     <v-main class="bg-grey-lighten-3">
-      <v-container>
-        <router-view />
-      </v-container>
+      <router-view />
     </v-main>
   </v-app>
 </template>
@@ -46,8 +33,7 @@
 import {ref} from "vue";
 
 const links = ref([
-  'Dashboard',
-  'Messages',
-  'Profile',
-  'Updates',])
+  'Главная',
+  'Тренировки',
+  'Профиль',])
 </script>
