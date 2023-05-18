@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar
-        v-if="this.$route.name !== 'login' && this.$route.name !== 'registration'"
+        v-if="route.name !== 'login' && route.name !== 'registration'"
         class="px-3"
         color="white"
         flat
@@ -33,7 +33,7 @@
 <script setup>
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 
 const links = ref([
   'Главная',
@@ -43,6 +43,7 @@ const links = ref([
 const userStore = useUserStore()
 const userStoreRef = ref(userStore)
 const router = useRouter();
+const route = useRoute();
 
 const logout = () => {
   userStore.setUserData(null)
