@@ -20,7 +20,8 @@
         </v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
-      <router-link to="/login" class="text-decoration-none text-shades-black position-absolute" style="right: 0">Войти</router-link>
+			<v-btn v-if="!userStoreRef.userToken" variant="text" to="/login">Войти</v-btn>
+			<v-btn v-else @click="logout" variant="text">Выйти</v-btn>
     </v-app-bar>
 
     <v-main class="bg-grey-lighten-3">
@@ -31,9 +32,21 @@
 
 <script setup>
 import {ref} from "vue";
+import {useUserStore} from "@/stores/user.js";
+import {useRouter} from "vue-router";
 
 const links = ref([
   'Главная',
   'Тренировки',
   'Профиль',])
+
+const userStore = useUserStore()
+const userStoreRef = ref(userStore)
+const router = useRouter();
+
+const logout = () => {
+  userStore.setUserData(null)
+  userStore.setUserToken(null)
+  router.push({name: 'home'})
+}
 </script>

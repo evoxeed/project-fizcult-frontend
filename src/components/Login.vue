@@ -1,15 +1,24 @@
 <template>
-    <div class="d-flex align-center justify-center" style="height: 100vh">
+    <div class="d-flex align-center justify-center overflow-hidden" style="height: 100vh">
+			<v-btn variant="text" :prepend-icon="mdiArrowLeft" size="small" class="position-absolute" style="top: 20px; left: 20px" :to="{name: 'home'}">
+				На главную
+			</v-btn>
         <v-sheet width="400" class="mx-auto bg-grey-lighten-3">
           <p class="mb-6">{{ isLogin ? 'Авторизация' : 'Регистрация'}}</p>
-            <v-form fast-fail ref="form" @submit.prevent="entry" >
-                <v-text-field variant="outlined" hide-details clearable v-model="username" label="Имя"></v-text-field>
+            <v-form fast-fail ref="form" @submit.prevent="entry">
+                <v-text-field variant="outlined" hide-details clearable v-model="username" label="Логин"></v-text-field>
 
                 <v-text-field v-if="!isLogin" class="mt-3" variant="outlined" required hide-details clearable v-model="userlastname" label="Фамилия"></v-text-field>
 
                 <v-text-field class="mt-3" variant="outlined" hide-details type="password" clearable v-model="password" label="Пароль"></v-text-field>
 
                 <v-text-field class="mt-3" v-if="!isLogin" hide-details type="password" clearable variant="outlined" v-model="password2" label="Повторите пароль"></v-text-field>
+
+								<v-expand-transition>
+									<div v-if="userStore.errorMassage" class="mt-3 text-red-darken-1 text-body-2">
+										{{ userStore.errorMassage }}
+									</div>
+								</v-expand-transition>
 
               <div class="mt-6">
                 <v-checkbox v-model="isRemember" v-if="isLogin" color="primary" density="compact"  @click="setRemember" hide-details label="Запомнить меня"/>
@@ -29,6 +38,7 @@
 import {ref, computed, watch} from "vue";
 import {useUserStore} from "@/stores/user.js";
 import {useRouter, useRoute} from "vue-router";
+import { mdiArrowLeft } from '@mdi/js'
 
 const userStore = useUserStore()
 const router = useRouter();
@@ -51,6 +61,7 @@ const setRemember = () => isRemember.value = !isRemember.value
 const setEntry = (newRoute) => {
   isLogin.value = newRoute === 'login'
   form.value?.reset()
+	userStore.errorMassage = ''
 }
 watch(
     () => route.name,
@@ -67,6 +78,12 @@ const entry = () => {
         last_name: userlastname.value
       }
       userStore.registration(body)
+    } else {
+      const body = {
+        login: username.value,
+        password: password.value,
+      }
+      userStore.login(body)
     }
 }
 

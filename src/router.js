@@ -4,7 +4,7 @@ import HelloWorld from "@/components/HelloWorld.vue";
 import Home from "@/pages/Home.vue";
 
 const isLoggedUser = (to, from, next) => {
-    if (localStorage.getItem("userData")) { // todo: Поменять условие на более подходящее когда сделают функцию логина
+    if (localStorage.getItem("userToken")) {
         next();
         return;
     }
