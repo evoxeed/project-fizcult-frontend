@@ -15,14 +15,14 @@
                 <v-text-field class="mt-3" v-if="!isLogin" hide-details type="password" clearable variant="outlined" v-model="password2" label="Повторите пароль"></v-text-field>
 
 								<v-expand-transition>
-									<div v-if="userStore.errorMassage" class="mt-3 text-red-darken-1 text-body-2">
+									<div v-if="userStore.errorMassage" class="mt-3 ml-4 text-red-darken-1 text-body-2">
 										{{ userStore.errorMassage }}
 									</div>
 								</v-expand-transition>
 
               <div class="mt-6">
                 <v-checkbox v-model="isRemember" v-if="isLogin" color="primary" density="compact"  @click="setRemember" hide-details label="Запомнить меня"/>
-                <v-btn type="submit" :disabled="!isDisabledBtn" color="primary" block >{{ isLogin ? 'Войти' : 'Зарегистрироваться'}}</v-btn>
+                <v-btn type="submit" :loading="userStore.isLoading" :disabled="!isDisabledBtn" color="primary" block >{{ isLogin ? 'Войти' : 'Зарегистрироваться'}}</v-btn>
               </div>
 
             </v-form>

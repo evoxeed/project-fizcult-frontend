@@ -5,12 +5,15 @@ export const useUserStore = defineStore('user', {
     state: () => ({
         userToken: localStorage.getItem('userToken') ?? '',
         userData: localStorage.getItem('userData') ?? {},
-        errorMassage: ''
+        errorMassage: '',
+        isLoading: false
     }),
-    getters: {
-        getUserToken: () => this.userToken,
-    },
+
     actions: {
+        setLoading(payload) {
+            this.isLoading = payload
+        },
+
         setUserData(newUserData) {
             this.userData = newUserData
             if (newUserData) {
@@ -31,6 +34,7 @@ export const useUserStore = defineStore('user', {
 
         registration(body) {
             this.errorMassage = ''
+            this.setLoading(true)
             api
                 .registration(body)
                 .then((response) => {
@@ -43,10 +47,14 @@ export const useUserStore = defineStore('user', {
                         this.errorMassage = error.response.data.error
                     }
                 })
+                .finally(() => {
+                    this.setLoading(false)
+                })
         },
 
         login(body) {
             this.errorMassage = ''
+            this.setLoading(true)
             api
                 .logIn(body)
                 .then((response) => {
@@ -61,6 +69,9 @@ export const useUserStore = defineStore('user', {
                 })
                 .catch((error) => {
                     console.error(error)
+                })
+                .finally(() => {
+                    this.setLoading(false)
                 })
         },
     }

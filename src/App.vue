@@ -27,6 +27,7 @@
     <v-main class="bg-grey-lighten-3">
       <router-view />
     </v-main>
+		<notif/>
   </v-app>
 </template>
 
@@ -34,6 +35,7 @@
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
 import {useRoute, useRouter} from "vue-router";
+import notif from "@/components/Notif.vue";
 
 const links = ref([
   'Главная',
