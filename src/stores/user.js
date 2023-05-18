@@ -50,7 +50,6 @@ export const useUserStore = defineStore('user', {
             api
                 .logIn(body)
                 .then((response) => {
-                    console.log(response)
                     if (response.data.result === false && response.data.error === 'Invalid credentials') {
                         this.errorMassage = 'Неверный логин или пароль'
                         return

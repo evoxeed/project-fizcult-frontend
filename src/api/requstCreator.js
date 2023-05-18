@@ -7,7 +7,7 @@ export const apiRequest = async (url, method, body = {}, options = {}) => {
     const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        ...(userStore.userToken ? {Authorization: `auth_key: ${userStore.userToken}`} : {})
+        ...(userStore.userToken ? {Authorization: `Bearer ${userStore.userToken}`} : {})
     }
 
     if (method === "get" || method === "delete") {
