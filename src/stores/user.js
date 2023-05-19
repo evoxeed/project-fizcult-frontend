@@ -75,6 +75,7 @@ export const useUserStore = defineStore('user', {
                     }
                     if (response.data.auth_token) {
                         this.setUserToken(response.data.auth_token)
+                        this.updateUserData()
                         this.$router.push({path: this.$router.currentRoute.value.query?.redirect || '/'})
                     }
                 })
