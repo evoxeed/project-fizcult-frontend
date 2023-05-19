@@ -4,7 +4,7 @@ import {api} from "@/api/api.js";
 export const useUserStore = defineStore('user', {
     state: () => ({
         userToken: localStorage.getItem('userToken') ?? '',
-        userData: localStorage.getItem('userData') ?? {},
+        userData: JSON.parse(localStorage.getItem('userData')) ?? null,
         errorMassage: '',
         isLoading: false
     }),
@@ -12,6 +12,17 @@ export const useUserStore = defineStore('user', {
     actions: {
         setLoading(payload) {
             this.isLoading = payload
+        },
+
+        updateUserData() {
+            api
+                .test()
+                .then((response) => {
+                    this.setUserData(response.data.user)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
         },
 
         setUserData(newUserData) {

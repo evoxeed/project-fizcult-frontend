@@ -1,55 +1,73 @@
 <template>
-  <v-app>
-    <v-app-bar
-        v-if="route.name !== 'login' && route.name !== 'registration'"
-        class="px-3"
-        color="white"
-        flat
-        density="compact"
-    >
-      <v-spacer></v-spacer>
-      <v-tabs
-          centered
-          color="grey-darken-2"
-      >
-        <v-tab
-            v-for="link in links"
-            :key="link"
-        >
-          {{ link }}
-        </v-tab>
-      </v-tabs>
-      <v-spacer></v-spacer>
-			<v-btn v-if="!userStoreRef.userToken" variant="text" to="/login">Войти</v-btn>
-			<v-btn v-else @click="logout" variant="text">Выйти</v-btn>
-    </v-app-bar>
+	<v-app>
+		<v-toolbar
+				v-if="route.name !== 'login' && route.name !== 'registration'"
+				class="px-3"
+				color="white"
+				flat
+				density="compact"
+		>
 
-    <v-main class="bg-grey-lighten-3">
-      <router-view />
-    </v-main>
+			<v-toolbar-title class="text-h5">Fizcult</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-btn v-if="!userStore.userToken" variant="text" to="/login">Войти</v-btn>
+			<div v-else class="">
+				Добро пожаловать,
+				<router-link :to="{name: 'profile'}" class="text-decoration-none text-black">
+					<strong>{{ userStore.userData?.first_name }}</strong>
+				</router-link>!
+			</div>
+
+			<template v-slot:extension>
+				<v-spacer></v-spacer>
+				<v-tabs
+						color="grey-darken-2"
+						center-active
+						grow
+				>
+					<v-tab
+							v-for="link in links"
+							:key="link.name"
+							:to="{name: link.to}"
+							:disabled="link.protected ? !!!userStore.userToken : false"
+
+					>
+						{{ link.name }}
+					</v-tab>
+				</v-tabs>
+				<v-spacer></v-spacer>
+
+			</template>
+		</v-toolbar>
+
+		<v-main class="bg-grey-lighten-3">
+			<router-view/>
+		</v-main>
 		<notif/>
-  </v-app>
+	</v-app>
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 import notif from "@/components/Notif.vue";
+import {mdiExitToApp} from "@mdi/js";
 
 const links = ref([
-  'Главная',
-  'Тренировки',
-  'Профиль',])
+	{name: 'Главная', to: 'home', protected: false},
+	{name: 'Тренировки', to: 'trainings', protected: true},
+	{name: 'Профиль', to: 'profile', protected: true},
+])
 
 const userStore = useUserStore()
-const userStoreRef = ref(userStore)
-const router = useRouter();
 const route = useRoute();
 
-const logout = () => {
-  userStore.setUserData(null)
-  userStore.setUserToken(null)
-  router.push({name: 'home'})
-}
+onMounted(() => {
+	if (!!userStore.userToken && !userStore.userData) {
+		console.log(123)
+		userStore.updateUserData()
+	}
+})
+
 </script>
