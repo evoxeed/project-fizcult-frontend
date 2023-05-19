@@ -1,5 +1,5 @@
 <template>
-	<v-container :class="this.$vuetify.display.smAndUp ? 'mt-5' : 'mt-0'">
+	<v-container :class="$vuetify.display.smAndUp ? 'mt-5' : 'mt-0'">
 		<h2 class="mb-5">Профиль учащегося</h2>
 		<v-row v-if="userStore.userData">
 			<v-col cols="12" sm="6">
@@ -53,7 +53,7 @@
 				width="auto"
 		>
 			<template v-slot:activator="{ props }">
-				<v-btn class="mt-5" v-bind="props" :block="this.$vuetify.display.xs" color="red-darken-2">
+				<v-btn class="mt-5" v-bind="props" :block="$vuetify.display.xs" color="red-darken-2">
 					Выйти из профиля
 				</v-btn>
 			</template>

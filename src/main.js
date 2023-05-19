@@ -11,4 +11,6 @@ pinia.use(({ store }) => {
     store.$router = markRaw(router)
 });
 
-createApp(App).use(pinia).use(router).use(vuetify).mount('#app')
+const app = createApp(App)
+app.config.globalProperties.$vuetify = vuetify
+app.use(pinia).use(router).use(vuetify).mount('#app')
