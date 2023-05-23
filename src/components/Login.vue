@@ -22,7 +22,7 @@
 
               <div class="mt-6">
                 <v-checkbox v-model="isRemember" v-if="isLogin" color="primary" density="compact"  @click="setRemember" hide-details label="Запомнить меня"/>
-                <v-btn type="submit" :loading="userStore.isLoading" :disabled="!isDisabledBtn" color="primary" block >{{ isLogin ? 'Войти' : 'Зарегистрироваться'}}</v-btn>
+                <v-btn type="submit" :loading="loadingStore.isLoading" :disabled="!isDisabledBtn" color="primary" block >{{ isLogin ? 'Войти' : 'Зарегистрироваться'}}</v-btn>
               </div>
 
             </v-form>
@@ -37,11 +37,12 @@
 <script setup>
 import {ref, computed, watch} from "vue";
 import {useUserStore} from "@/stores/user.js";
-import {useRouter, useRoute} from "vue-router";
+import {useRoute} from "vue-router";
 import { mdiArrowLeft } from '@mdi/js'
+import {useLoadingStore} from "@/stores/loading.js";
 
 const userStore = useUserStore()
-const router = useRouter();
+const loadingStore = useLoadingStore()
 const route = useRoute();
 const form = ref()
 const username = ref('')

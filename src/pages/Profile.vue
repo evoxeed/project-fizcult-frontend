@@ -57,7 +57,7 @@
 					Выйти из профиля
 				</v-btn>
 			</template>
-			<v-card width="400">
+			<v-card max-width="400" width="100%" flat>
 				<v-card-title class="text-h5">
 					Подтверждение
 				</v-card-title>

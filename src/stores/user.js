@@ -1,19 +1,14 @@
 import {defineStore} from 'pinia'
 import {api} from "@/api/api.js";
-
+import {useLoadingStore} from "@/stores/loading.js";
 export const useUserStore = defineStore('user', {
     state: () => ({
         userToken: localStorage.getItem('userToken') ?? '',
         userData: JSON.parse(localStorage.getItem('userData')) ?? null,
         errorMassage: '',
-        isLoading: false
     }),
 
     actions: {
-        setLoading(payload) {
-            this.isLoading = payload
-        },
-
         updateUserData() {
             api
                 .test()
@@ -44,8 +39,9 @@ export const useUserStore = defineStore('user', {
         },
 
         registration(body) {
+            const loadingStore = useLoadingStore()
             this.errorMassage = ''
-            this.setLoading(true)
+            loadingStore.setLoading(true)
             api
                 .registration(body)
                 .then((response) => {
@@ -59,13 +55,14 @@ export const useUserStore = defineStore('user', {
                     }
                 })
                 .finally(() => {
-                    this.setLoading(false)
+                    loadingStore.setLoading(false)
                 })
         },
 
         login(body) {
+            const loadingStore = useLoadingStore()
             this.errorMassage = ''
-            this.setLoading(true)
+            loadingStore.setLoading(true)
             api
                 .logIn(body)
                 .then((response) => {
@@ -83,7 +80,7 @@ export const useUserStore = defineStore('user', {
                     console.error(error)
                 })
                 .finally(() => {
-                    this.setLoading(false)
+                    loadingStore.setLoading(false)
                 })
         },
     }
