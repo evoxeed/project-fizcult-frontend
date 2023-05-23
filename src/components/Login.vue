@@ -3,7 +3,7 @@
 			<v-btn variant="text" :prepend-icon="mdiArrowLeft" size="small" class="position-absolute" style="top: 20px; left: 20px" :to="{name: 'home'}">
 				На главную
 			</v-btn>
-        <v-sheet width="400" class="mx-auto bg-grey-lighten-3">
+        <v-sheet width="400" class="mx-auto bg-grey-lighten-3 pa-5">
           <p class="mb-6">{{ isLogin ? 'Авторизация' : 'Регистрация'}}</p>
             <v-form fast-fail ref="form" @submit.prevent="entry">
                 <v-text-field variant="outlined" hide-details clearable v-model="username" label="Логин"></v-text-field>
@@ -27,8 +27,8 @@
 
             </v-form>
             <div class="mt-2">
-                <p v-if="isLogin" class="text-body-2">Нет аккаунта? <a href="#" @click="router.push({name: 'registration', query: {redirect: route.query.redirect}})">Зарегистрируйтесь</a></p>
-                <p v-else class="text-body-2">Есть аккаунт? <a href="#" @click="router.push({name: 'login', query: {redirect: route.query.redirect}})">Войти</a></p>
+							<p v-if="isLogin" class="text-body-2">Нет аккаунта? <router-link :to="{name: 'registration', query: {redirect: route.query.redirect}}">Зарегистрируйтесь</router-link></p>
+							<p v-else class="text-body-2">Есть аккаунт? <router-link :to="{name: 'login', query: {redirect: route.query.redirect}}">Войти</router-link></p>
             </div>
         </v-sheet>
     </div>
