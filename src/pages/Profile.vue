@@ -34,7 +34,7 @@
 								Волейбол
 							</v-card-item>
 							<v-card-item subtitle="Тип энергообеспечения">
-								Средний
+								Аэробный
 							</v-card-item>
 							<v-card-item subtitle="Физические качество">
 								Выносливость
