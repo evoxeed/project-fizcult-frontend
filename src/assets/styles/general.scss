@@ -1,3 +1,7 @@
 body {
   //background-color: #fef
 }
+
+.v-timeline--vertical.v-timeline .v-timeline-item:first-child .v-timeline-divider, .v-timeline--vertical.v-timeline .v-timeline-item:first-child .v-timeline-item__body, .v-timeline--vertical.v-timeline .v-timeline-item:first-child .v-timeline-item__opposite{
+  padding-block-start: 60px !important;
+}

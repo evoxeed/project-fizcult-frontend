@@ -5,9 +5,22 @@ import {useLoadingStore} from "@/stores/loading.js";
 export const useTrainingStore = defineStore('training', {
     state: () => ({
         skillsData: JSON.parse(localStorage.getItem('skillsData')) || [],
-        levelData: {},
-        levelId: null
+        levelData: null,
+        levelId: null,
+        activeSkill: null,
+        activeLevel: null,
+        userLevel: null
     }),
+    getters: {
+        getCurrentLessons(state) {
+            return state.skillsData[state.levelId].levels.map((item) => {
+                if (item.index === state.levelData.index) {
+                    return state.levelData
+                }
+                return item
+            })
+        },
+    },
     actions: {
         setSkillsData(payload) {
             this.skillsData = payload
@@ -17,8 +30,17 @@ export const useTrainingStore = defineStore('training', {
                 localStorage.removeItem('skillsData')
             }
         },
+        setActiveSkill(payload) {
+          this.activeSkill = payload
+        },
+        setUserLevel(payload) {
+          this.userLevel = payload
+        },
+        setActiveLevel(payload) {
+          this.activeLevel = payload
+        },
         setLevelData(payload) {
-            this.levelData = payload.data
+            this.levelData = payload
         },
         setLevelId(payload) {
             this.levelId = payload
@@ -29,8 +51,13 @@ export const useTrainingStore = defineStore('training', {
             api
                 .level(id)
                 .then((response) => {
-                    this.setLevelData(response)
+                    // console.log("levelData", response.data.level)
                     this.setLevelId(id)
+                    this.setActiveSkill(this.skillsData[id])
+                    this.setActiveLevel(response.data.level.index)
+                    this.setUserLevel(response.data.level.index)
+                    this.setLevelData(response.data.level)
+                    return response.data
                 })
                 .catch((error) => {
                     console.error(error)
@@ -45,7 +72,11 @@ export const useTrainingStore = defineStore('training', {
             api
                 .skills()
                 .then((response) => {
-                    this.setSkillsData(response.data)
+                    const allSkillsData = {}
+                    response.data.forEach(skill => {
+                        allSkillsData[skill.id] = skill
+                    })
+                    this.setSkillsData(allSkillsData)
                 })
                 .catch((error) => {
                     console.error(error)

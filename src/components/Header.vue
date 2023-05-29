@@ -37,12 +37,24 @@
 
 		</template>
 	</v-toolbar>
+	<div class="position-relative">
+		<v-progress-linear
+				v-if="route.name !== 'login' && route.name !== 'registration'"
+				:active="loadingStore.isLoading"
+				:indeterminate="loadingStore.isLoading"
+				absolute
+				color="primary"
+		></v-progress-linear>
+	</div>
 </template>
 
 <script setup>
 import {onMounted, ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
 import {useRoute} from "vue-router";
+import {useLoadingStore} from "@/stores/loading.js";
+
+const loadingStore = useLoadingStore()
 
 const links = ref([
 	{name: 'Главная', to: 'home'},

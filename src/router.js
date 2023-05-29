@@ -5,6 +5,9 @@ import Home from "@/pages/Home.vue";
 import {useNotifStore} from "@/stores/notif.js";
 import trainings from "@/pages/Trainings.vue";
 import profile from "@/pages/Profile.vue";
+import LessonPage from "@/pages/LessonPage.vue";
+import SkillsItems from "@/components/SkillsItems.vue";
+import {useTrainingStore} from "@/stores/training.js";
 
 const isLoggedUser = (to, from, next) => {
     const notifStore = useNotifStore()
@@ -15,6 +18,16 @@ const isLoggedUser = (to, from, next) => {
 
     notifStore.createCustomNotif('Для продолжения работы необходимо авторизоваться', true)
     next({name: 'login', query: {redirect: to.path}});
+};
+
+const haveDataLesson = (to, from, next) => {
+    const trainingStore = useTrainingStore()
+
+    if (trainingStore.levelId !== to.params.skill) {
+        trainingStore.level(to.params.skill)
+    }
+
+    next();
 };
 
 const routes = [
@@ -36,8 +49,20 @@ const routes = [
     {
         path: '/trainings',
         component: trainings,
-        name: 'trainings',
-        beforeEnter: isLoggedUser
+        beforeEnter: isLoggedUser,
+        children: [
+            {
+                path: '',
+                component: SkillsItems,
+                name: 'trainings',
+            },
+            {
+                path: ':skill',
+                component: LessonPage,
+                name: 'lessonPage',
+                beforeEnter: haveDataLesson,
+            }
+        ]
     },
     {
         path: '/profile',
