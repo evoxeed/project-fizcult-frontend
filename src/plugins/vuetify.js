@@ -4,7 +4,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 import 'vuetify/styles'
-import { mdiCheckCircle, mdiLock } from '@mdi/js'
+import { mdiCheckBold, mdiLock, mdiRun } from '@mdi/js'
 
 export default createVuetify({
     components: {
@@ -16,8 +16,9 @@ export default createVuetify({
         defaultSet: 'mdi',
         aliases: {
             ...aliases,
-            checkCircle: mdiCheckCircle,
-            lock: mdiLock
+            checkCircle: mdiCheckBold ,
+            lock: mdiLock,
+            active: mdiRun
         },
         sets: {
             mdi,

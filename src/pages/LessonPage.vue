@@ -1,20 +1,25 @@
 <template>
-	<v-timeline align="start" truncate-line="end" side="end" v-if="trainingStore.levelId">
+	<v-timeline align="start"
+							truncate-line="end"
+							side="end"
+							v-if="trainingStore.levelId"
+							class="pl-2"
+	>
 		<v-timeline-item
 				v-for="level in trainingStore.getCurrentLessons"
 				:key="level.index"
 				fill-dot
-				size="small"
+				:size="$vuetify.display.xs ? 'small' : 'default'"
 				:dot-color="iconColorLevel(level)"
 				density="compact"
 				hide-opposite
 				elevation="2"
 		>
 			<template v-slot:icon>
-				<v-icon>{{ iconAccessLevel(level) }}</v-icon>
+				<v-icon :size="$vuetify.display.xs ? 'small' : 'default'">{{ iconAccessLevel(level) }}</v-icon>
 			</template>
-			<div :class="{'ml-n3 pr-6': $vuetify.display.xs}">
-				<h1 class="mt-n1 headline font-weight-light">
+			<div :class="{'ml-n3 pr-4': $vuetify.display.xs}">
+				<h1 class="mt-n2 headline font-weight-light">
 					Уровень{{ level.index }}
 				</h1>
 				<p class="text-caption mb-4">
@@ -63,6 +68,8 @@ const iconAccessLevel = (level) => {
 		return '$checkCircle'
 	} else if (level.index > trainingStore.userLevel) {
 		return '$lock'
+	} else {
+		return "$active"
 	}
 }
 

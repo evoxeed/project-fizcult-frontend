@@ -1,37 +1,42 @@
 <template>
-	<h2 class="mb-3 headline font-weight-light mt-10">Выберите тип тренировки:</h2>
-	<v-item-group
-			v-model="selectSkills"
-			divided
-			mandatory
-			selected-class="bg-primary"
-			class="d-flex flex-wrap mb-16"
-			style="gap: 10px"
-	>
-		<v-item v-slot="{ isSelected, selectedClass, toggle }"
-						v-for="skill in trainingStore.skillsData"
-						:key="skill.id"
-						:value="skill.id">
-			<v-card
-					width="400"
-					@click="toggle"
-			>
-				<v-img
-						:src="`https://loremflickr.com/320/240/run?random=${skill.id}`"
-						height="200px"
-						cover
+	<v-container>
+		<h2 class="mb-4 headline font-weight-light mt-8">Выберите тип тренировки:</h2>
+		<v-item-group
+				v-model="selectSkills"
+				divided
+				mandatory
+				selected-class="bg-primary"
+		>
+			<v-row>
+				<v-col cols="12" :sm="6"
+							 v-for="skill in trainingStore.skillsData"
+							 :key="skill.id">
+					<v-item v-slot="{ isSelected, selectedClass, toggle }"
+									:value="skill.id">
+						<v-card
+								@click="toggle"
+								class="trainingItems"
+								rounded
+						>
+							<v-img
+									:src="`https://loremflickr.com/320/240/run?random=${skill.id}`"
+									height="200"
+									cover
+							>
+								<template v-slot:placeholder>
+									<v-skeleton-loader type="image, image"></v-skeleton-loader>
+								</template>
+							</v-img>
+							<v-card-title class="headline font-weight-light">
+								{{ skill.name }}
+							</v-card-title>
+						</v-card>
+					</v-item>
+				</v-col>
+			</v-row>
 
-				>
-					<template v-slot:placeholder>
-						<v-skeleton-loader color="grey-lighten-2" type="image, image"></v-skeleton-loader>
-					</template>
-				</v-img>
-				<v-card-title>
-					{{ skill.name }}
-				</v-card-title>
-			</v-card>
-		</v-item>
-	</v-item-group>
+		</v-item-group>
+	</v-container>
 </template>
 
 <script setup>
@@ -54,4 +59,3 @@ watch(
 
 trainingStore.skills()
 </script>
-

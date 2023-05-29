@@ -3,7 +3,7 @@
 		<h2 class="mb-5">Профиль учащегося</h2>
 		<v-row v-if="userStore.userData">
 			<v-col cols="12" sm="6">
-				<v-card variant="flat">
+				<v-card variant="flat" rounded>
 					<v-card-title>Общая информация</v-card-title>
 					<div class="d-flex align-start">
 						<div class="profile__row">
@@ -26,7 +26,7 @@
 				</v-card>
 			</v-col>
 			<v-col cols="12" sm="6">
-				<v-card variant="flat">
+				<v-card variant="flat" rounded>
 					<v-card-title>Базовые характеристики</v-card-title>
 					<div class="d-flex align-start">
 						<div class="profile__row">
