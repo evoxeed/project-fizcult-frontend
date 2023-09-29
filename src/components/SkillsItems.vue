@@ -53,7 +53,7 @@ let selectSkills = ref(null)
 watch(
 		() => selectSkills.value,
 		newSelectSkills => {
-			router.push({name: 'lessonPage', params: {skill: newSelectSkills}})
+			router.push({name: 'lessonLevel', params: {lessonLevelId: newSelectSkills}})
 		}
 )
 
