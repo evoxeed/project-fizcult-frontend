@@ -46,7 +46,7 @@ export const useUserStore = defineStore('user', {
                 .registration(body)
                 .then((response) => {
                     this.setUserData(response.data)
-                    this.$router.push({path: this.$router.currentRoute.value.query?.redirect || '/'})
+                    this.login({login: response.data.login, password: body.password})
                 })
                 .catch((error) => {
                     console.error(error)
