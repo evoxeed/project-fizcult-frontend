@@ -19,8 +19,8 @@
             to="/trainings/1/2"
         >
           <template v-if="lesson.completed || lesson.unavailable" v-slot:append>
-            <v-icon v-if="lesson.unavailable" icon="$lock"></v-icon>
-            <v-icon v-else icon="$checkCircle"></v-icon>
+            <v-icon class="ml-1" v-if="lesson.unavailable" icon="$lock"></v-icon>
+            <v-icon class="ml-1" v-else icon="$checkCircle"></v-icon>
           </template>
           {{ lesson.label }}
         </v-chip>

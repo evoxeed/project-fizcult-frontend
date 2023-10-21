@@ -1,85 +1,75 @@
 <template>
-	<v-timeline align="start"
-							truncate-line="end"
-							side="end"
-							v-if="trainingStore.levelId"
-							class="pl-2"
-	>
-		<v-timeline-item
-				v-for="level in trainingStore.getCurrentLessons"
-				:key="level.index"
-				fill-dot
-				:size="$vuetify.display.xs ? 'small' : 'default'"
-				:dot-color="iconColorLevel(level)"
-				density="compact"
-				hide-opposite
-				elevation="2"
-		>
-			<template v-slot:icon>
-				<v-icon :size="$vuetify.display.xs ? 'small' : 'default'">{{ iconAccessLevel(level) }}</v-icon>
-			</template>
-			<div :class="{'ml-n3 pr-4': $vuetify.display.xs}">
-				<h1 class="mt-n2 headline font-weight-light">
-					Уровень{{ level.index }}
-				</h1>
-				<p class="text-caption mb-4">
-					{{
-						level.valueMin + trainingStore.activeSkill.valueName + ' - ' + level.valueMax + trainingStore.activeSkill.valueName
-					}}
-				</p>
-				<div v-if="level.index === trainingStore.activeLevel">
-					<p class="mb-4">{{ level.description }}</p>
-					<v-row>
-						<v-col cols="12"
-									 sm="6"
-									 v-for="lesson in level.workouts"
-									 :key="lesson.id"
-						>
-							<v-card class="elevation-2" rounded>
-								<iframe width="100%" height="200" src="https://www.youtube-nocookie.com/embed/jsZoIZm6d5w"
-												title="YouTube video player" frameborder="0"
-												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-												allowfullscreen></iframe>
+  <v-btn variant="text" class="ma-2" :prepend-icon="mdiArrowLeft" size="small"  :to="{path: '/trainings/' + trainingStore.activeSkill.id}" exact>
+    Все занятия
+  </v-btn>
+  <v-card
+      color="transparent"
+      flat
+  >
+    <v-window v-model="onboarding">
+      <v-window-item
+          v-for="n in length"
+          :key="`card-${n}`"
+          :value="n"
+      >
+        <v-card
+            class="d-flex justify-center align-center flex-column mx-3"
+            color="transparent"
+            elevation="0"
+        >
+          <v-card class="ma-2" max-width="800px" width="100%" flat>
+            <v-card-title class="text-center">Занятие 2</v-card-title>
 
-								<v-card-title>
-									{{ lesson.name }}
-								</v-card-title>
 
-								<v-card-text>
-									{{ lesson.description }}
-								</v-card-text>
-							</v-card>
-						</v-col>
-					</v-row>
-				</div>
-			</div>
-		</v-timeline-item>
-	</v-timeline>
+<!--            <iframe class="px-2 rounded-lg"-->
+<!--                frameBorder="0"-->
+<!--                :height="$vuetify.display.xs ? 260 : 350"-->
+<!--                src="https://rutube.ru/play/embed/19a1ce7c17c9cfa13117c023be6403c3?p=Adzr0NVNl7uAFWC0oiulrA"-->
+<!--                width="100%"></iframe>-->
+            <v-card-title class="font-weight-bold text-h5">
+              Челночный бег {{ n }}
+            </v-card-title>
+            <v-card-text class="overflow-auto" style="height: 220px">
+              <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, ab aliquam animi aspernatur eius enim
+                facere hic, incidunt ipsa laboriosam minus, molestiae natus nihil nobis omnis quasi quidem tempore
+                tenetur?
+              </div>
+              <div>Aut beatae blanditiis debitis deserunt ducimus error explicabo facere, iste iure mollitia, nobis
+                numquam quae saepe sed veritatis. Eligendi fugit illum inventore itaque nam nisi, numquam odit
+                temporibus velit vitae?
+              </div>
+              <div>Animi dolor dolorem doloremque error ex exercitationem recusandae repellat tenetur ut voluptates.
+                Aperiam, porro quaerat! Excepturi exercitationem harum impedit inventore nulla numquam officia quasi
+                rem, voluptate voluptatem voluptates voluptatibus voluptatum!
+              </div>
+
+            </v-card-text>
+          </v-card>
+
+        </v-card>
+      </v-window-item>
+    </v-window>
+
+    <v-card-actions class="justify-center pa-0" >
+      <v-pagination
+          :size="$vuetify.display.xs ? 'small' : 'default'"
+          v-model="onboarding"
+          :length="length"
+          :total-visible="6"
+          :density="$vuetify.display.xs ? 'comfortable': 'default'"
+          rounded
+      ></v-pagination>
+    </v-card-actions>
+  </v-card>
+
 </template>
 
 <script setup>
 import {useTrainingStore} from "@/stores/training.js";
+import {ref} from "vue";
+import {mdiArrowLeft} from "@mdi/js";
 
 const trainingStore = useTrainingStore()
-
-
-const iconAccessLevel = (level) => {
-	if (level.index < trainingStore.userLevel) {
-		return '$checkCircle'
-	} else if (level.index > trainingStore.userLevel) {
-		return '$lock'
-	} else {
-		return "$active"
-	}
-}
-
-const iconColorLevel = (level) => {
-	if (level.index < trainingStore.userLevel) {
-		return 'success'
-	} else if (level.index > trainingStore.userLevel) {
-		return 'error'
-	} else {
-		return 'deep-purple-darken-1'
-	}
-}
+const length = ref(6)
+const onboarding = ref(1)
 </script>
