@@ -21,16 +21,6 @@ const isLoggedUser = (to, from, next) => {
     next({name: 'login', query: {redirect: to.path}});
 };
 
-const haveDataLesson = (to, from, next) => {
-    const trainingStore = useTrainingStore()
-
-    if (trainingStore.levelId !== to.params.skill) {
-        trainingStore.level(to.params.skill)
-    }
-
-    next();
-};
-
 const routes = [
     {
         path: '/',
@@ -66,7 +56,6 @@ const routes = [
                 path: ':lessonLevelId/:skill',
                 component: LessonPage,
                 name: 'lessonPage',
-                beforeEnter: haveDataLesson,
             }
         ]
     },

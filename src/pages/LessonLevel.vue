@@ -2,27 +2,28 @@
   <v-container>
     <h2 class="mb-6 headline font-weight-light mt-8">Выберите доступное занятие:</h2>
     <v-row
+        v-if="trainingStore.lessonLevel"
         align="center"
         justify="start"
         style="gap: 6px"
     >
       <v-col
-          v-for="lesson in lessons"
-          :key="lesson.id"
-          cols="auto"
+          v-for="key in trainingStore.lessonLevel.total"
+          :key="key"
           class="pa-0"
+          cols="auto"
       >
         <v-chip
-            variant="outlined"
+            :disabled="disableLessons[key]"
             size="large"
-            :disabled="lesson.unavailable"
-            to="/trainings/1/2"
+            variant="outlined"
+            :to="`/trainings/${route.params.lessonLevelId}/${key}`"
         >
-          <template v-if="lesson.completed || lesson.unavailable" v-slot:append>
-            <v-icon class="ml-1" v-if="lesson.unavailable" icon="$lock"></v-icon>
-            <v-icon class="ml-1" v-else icon="$checkCircle"></v-icon>
+          <template v-if="completeLessons[key] || disableLessons[key]" v-slot:append>
+            <v-icon v-if="disableLessons[key]" class="ml-1" icon="$lock"></v-icon>
+            <v-icon v-else class="ml-1" icon="$checkCircle"></v-icon>
           </template>
-          {{ lesson.label }}
+          Занятие {{ key }}
         </v-chip>
 
       </v-col>
@@ -32,18 +33,27 @@
   </v-container>
 </template>
 <script setup>
-import {ref} from "vue";
+import {useTrainingStore} from "@/stores/training.js";
+import {computed} from "vue";
+import {useRoute} from "vue-router";
+const route = useRoute();
 
-const lessons = ref([
-  {id: 0, label: 'Занятие 1', completed: true, unavailable: false},
-  {id: 1, label: 'Занятие 2', completed: false, unavailable: false},
-  {id: 2, label: 'Занятие 3', completed: false, unavailable: true},
-  {id: 3, label: 'Занятие 4', completed: false, unavailable: true},
-  {id: 4, label: 'Занятие 5', completed: false, unavailable: true},
-  {id: 5, label: 'Занятие 6', completed: false, unavailable: true},
-  {id: 6, label: 'Занятие 7', completed: false, unavailable: true},
-  {id: 7, label: 'Занятие 8', completed: false, unavailable: true},
-  {id: 8, label: 'Занятие 9', completed: false, unavailable: true},
-  {id: 9, label: 'Занятие 10', completed: false, unavailable: true}
-])
+const trainingStore = useTrainingStore()
+trainingStore.selectActiveSkill(route.params.lessonLevelId)
+
+let completeLessons = computed(() => {
+  let lessons = {}
+  for (let i = 1; i <= trainingStore.lessonLevel.total; i++) {
+    lessons[i] = i < trainingStore.lessonLevel.current
+  }
+  return lessons
+})
+
+let disableLessons = computed(() => {
+  let lessons = {}
+  for (let i = 1; i <= trainingStore.lessonLevel.total; i++) {
+    lessons[i] = i > trainingStore.lessonLevel.current
+  }
+  return lessons
+})
 </script>

@@ -8,10 +8,10 @@
 					<div class="d-flex align-start">
 						<div class="profile__row">
 							<v-card-item subtitle="Имя">
-								{{ userStore.userData.first_name }}
+								{{ userStore.userData.firstName }}
 							</v-card-item>
 							<v-card-item subtitle="Фамилия">
-								{{ userStore.userData.last_name }}
+								{{ userStore.userData.lastName }}
 							</v-card-item>
 							<v-card-item subtitle="Институт">
 								ИМИТиФ
@@ -34,7 +34,7 @@
 								Волейбол
 							</v-card-item>
 							<v-card-item subtitle="Тип энергообеспечения">
-								Аэробный
+                {{ userStore.userData.energyType }}
 							</v-card-item>
 							<v-card-item subtitle="Физические качество">
 								Выносливость
@@ -97,7 +97,7 @@ const userStore = useUserStore()
 const dialog = ref(false)
 const notifStore = useNotifStore()
 
-
+userStore.updateUserData()
 const logout = () => {
 	userStore.setUserData(null)
 	userStore.setUserToken(null)

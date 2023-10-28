@@ -4,14 +4,14 @@ import {useLoadingStore} from "@/stores/loading.js";
 export const useUserStore = defineStore('user', {
     state: () => ({
         userToken: localStorage.getItem('userToken') ?? '',
-        userData: JSON.parse(localStorage.getItem('userData')) ?? null,
+        userData: null,
         errorMassage: '',
     }),
 
     actions: {
         updateUserData() {
             api
-                .test()
+                .userInfo()
                 .then((response) => {
                     this.setUserData(response.data.user)
                 })
@@ -22,11 +22,6 @@ export const useUserStore = defineStore('user', {
 
         setUserData(newUserData) {
             this.userData = newUserData
-            if (newUserData) {
-                localStorage.setItem('userData', JSON.stringify(newUserData))
-            } else {
-                localStorage.removeItem('userData')
-            }
         },
 
         setUserToken(newToken) {

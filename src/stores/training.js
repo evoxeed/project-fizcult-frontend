@@ -4,60 +4,44 @@ import {useLoadingStore} from "@/stores/loading.js";
 
 export const useTrainingStore = defineStore('training', {
     state: () => ({
-        skillsData: JSON.parse(localStorage.getItem('skillsData')) || [],
-        levelData: null,
-        levelId: null,
-        activeSkill: null,
-        activeLevel: null,
-        userLevel: null
+        skillsData: null,
+        lessonLevel: null,
+        lessonData: null
     }),
-    getters: {
-        getCurrentLessons(state) {
-            return state.skillsData[state.levelId].levels.map((item) => {
-                if (item.index === state.levelData.index) {
-                    return state.levelData
-                }
-                return item
-            })
-        },
-    },
     actions: {
         setSkillsData(payload) {
             this.skillsData = payload
-            if (payload) {
-                localStorage.setItem('skillsData', JSON.stringify(payload))
-            } else {
-                localStorage.removeItem('skillsData')
-            }
         },
-        setActiveSkill(payload) {
-          this.activeSkill = payload
+        setLessonLevel(payload) {
+            this.lessonLevel = payload
         },
-        setUserLevel(payload) {
-          this.userLevel = payload
+        setLessonData(payload) {
+          this.lessonData = payload
         },
-        setActiveLevel(payload) {
-          this.activeLevel = payload
-        },
-        setLevelData(payload) {
-            this.levelData = payload
-        },
-        setLevelId(payload) {
-            this.levelId = payload
-        },
-        level(id) {
+
+        selectActiveSkill(skill) {
             const loadingStore = useLoadingStore()
             loadingStore.setLoading(true)
             api
-                .level(id)
+                .selectSkill(skill)
                 .then((response) => {
-                    // console.log("levelData", response.data.level)
-                    this.setLevelId(id)
-                    this.setActiveSkill(this.skillsData[id])
-                    this.setActiveLevel(response.data.level.index)
-                    this.setUserLevel(response.data.level.index)
-                    this.setLevelData(response.data.level)
-                    return response.data
+                    this.setLessonLevel(response.data.lessons)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+                .finally(() => {
+                    loadingStore.setLoading(false)
+                })
+        },
+        lesson(skillId, lessonLevelId) {
+            const loadingStore = useLoadingStore()
+            loadingStore.setLoading(true)
+            api
+                .lesson(skillId, lessonLevelId)
+                .then((response) => {
+                    console.log("lessonData", response.data.lesson.exercises)
+                    this.setLessonData(response.data.lesson.exercises)
                 })
                 .catch((error) => {
                     console.error(error)
@@ -73,7 +57,7 @@ export const useTrainingStore = defineStore('training', {
                 .skills()
                 .then((response) => {
                     const allSkillsData = {}
-                    response.data.forEach(skill => {
+                    response.data.skills.forEach(skill => {
                         allSkillsData[skill.id] = skill
                     })
                     this.setSkillsData(allSkillsData)
