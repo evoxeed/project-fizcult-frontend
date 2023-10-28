@@ -1,85 +1,89 @@
 <template>
-	<v-timeline align="start"
-							truncate-line="end"
-							side="end"
-							v-if="trainingStore.levelId"
-							class="pl-2"
-	>
-		<v-timeline-item
-				v-for="level in trainingStore.getCurrentLessons"
-				:key="level.index"
-				fill-dot
-				:size="$vuetify.display.xs ? 'small' : 'default'"
-				:dot-color="iconColorLevel(level)"
-				density="compact"
-				hide-opposite
-				elevation="2"
-		>
-			<template v-slot:icon>
-				<v-icon :size="$vuetify.display.xs ? 'small' : 'default'">{{ iconAccessLevel(level) }}</v-icon>
-			</template>
-			<div :class="{'ml-n3 pr-4': $vuetify.display.xs}">
-				<h1 class="mt-n2 headline font-weight-light">
-					Уровень{{ level.index }}
-				</h1>
-				<p class="text-caption mb-4">
-					{{
-						level.valueMin + trainingStore.activeSkill.valueName + ' - ' + level.valueMax + trainingStore.activeSkill.valueName
-					}}
-				</p>
-				<div v-if="level.index === trainingStore.activeLevel">
-					<p class="mb-4">{{ level.description }}</p>
-					<v-row>
-						<v-col cols="12"
-									 sm="6"
-									 v-for="lesson in level.workouts"
-									 :key="lesson.id"
-						>
-							<v-card class="elevation-2" rounded>
-								<iframe width="100%" height="200" src="https://www.youtube-nocookie.com/embed/jsZoIZm6d5w"
-												title="YouTube video player" frameborder="0"
-												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-												allowfullscreen></iframe>
+  <v-btn variant="text" class="ma-2" :prepend-icon="mdiArrowLeft" size="small"  :to="{path: '/trainings/' + route.params.lessonLevelId}" exact>
+    Все занятия
+  </v-btn>
+  <v-card
+      v-if="trainingStore.lessonData"
+      color="transparent"
+      flat
+  >
+    <v-window v-model="onboarding">
+      <v-window-item
+          v-for="(lesson, key) in trainingStore.lessonData"
+          :key="key"
+          :value="key + 1"
+      >
+        <v-card
+            class="d-flex justify-center align-center flex-column mx-3"
+            color="transparent"
+            elevation="0"
+        >
+          <v-card class="ma-2" max-width="800px" width="100%" flat>
+            <v-card-title class="text-center">Занятие {{ route.params.skill }}</v-card-title>
 
-								<v-card-title>
-									{{ lesson.name }}
-								</v-card-title>
+            <div :style="{'height' : $vuetify.display.xs ? '260px' : '350px'}">
+              <iframe v-if="iframeVisible[key]" class="px-2 rounded-lg"
+                      frameBorder="0"
+                      height="100%"
+                      src="https://rutube.ru/play/embed/19a1ce7c17c9cfa13117c023be6403c3?p=Adzr0NVNl7uAFWC0oiulrA"
+                      width="100%"></iframe>
+            </div>
 
-								<v-card-text>
-									{{ lesson.description }}
-								</v-card-text>
-							</v-card>
-						</v-col>
-					</v-row>
-				</div>
-			</div>
-		</v-timeline-item>
-	</v-timeline>
+
+            <v-card-title class="font-weight-bold text-h5">
+              {{ lesson.name }}
+            </v-card-title>
+            <v-card-text class="overflow-auto" style="height: 220px">
+              {{ lesson.description}}
+            </v-card-text>
+          </v-card>
+
+        </v-card>
+      </v-window-item>
+    </v-window>
+
+    <v-card-actions class="justify-center pa-0" >
+      <v-pagination
+          :size="$vuetify.display.xs ? 'small' : 'default'"
+          v-model="onboarding"
+          :length="trainingStore.lessonData.length"
+          :total-visible="6"
+          :density="$vuetify.display.xs ? 'comfortable': 'default'"
+          rounded
+          @update:model-value="handlePageSwitch"
+      ></v-pagination>
+    </v-card-actions>
+  </v-card>
+
 </template>
 
 <script setup>
 import {useTrainingStore} from "@/stores/training.js";
-
+import {ref, watchEffect} from "vue";
+import {mdiArrowLeft} from "@mdi/js";
+import {useRoute} from "vue-router";
+const route = useRoute();
 const trainingStore = useTrainingStore()
 
+trainingStore.lesson(route.params.skill, route.params.lessonLevelId)
 
-const iconAccessLevel = (level) => {
-	if (level.index < trainingStore.userLevel) {
-		return '$checkCircle'
-	} else if (level.index > trainingStore.userLevel) {
-		return '$lock'
-	} else {
-		return "$active"
-	}
-}
+const onboarding = ref(1)
 
-const iconColorLevel = (level) => {
-	if (level.index < trainingStore.userLevel) {
-		return 'success'
-	} else if (level.index > trainingStore.userLevel) {
-		return 'error'
-	} else {
-		return 'deep-purple-darken-1'
-	}
+const iframeVisible = ref([]);
+
+watchEffect(() => {
+  if (trainingStore.lessonData) {
+    iframeVisible.value = trainingStore.lessonData.map(() => false);
+    if (iframeVisible.value.length > 0) {
+      iframeVisible.value[0] = true;
+    }
+  }
+});
+
+const handlePageSwitch = (newPage) => {
+  // Делаем все iframe невидимыми
+  iframeVisible.value.fill(false);
+  // Делаем текущий iframe видимым:
+  iframeVisible.value[newPage - 1] = true;
 }
 </script>

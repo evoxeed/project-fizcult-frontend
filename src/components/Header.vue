@@ -13,7 +13,7 @@
 		<div v-else-if="userStore.userToken && userStore.userData">
 			Добро пожаловать,
 			<router-link :to="{name: 'profile'}" class="text-decoration-none text-black">
-				<strong>{{ userStore.userData?.first_name }}</strong>
+				<strong>{{ userStore.userData?.firstName }}</strong>
 			</router-link>!
 		</div>
 
